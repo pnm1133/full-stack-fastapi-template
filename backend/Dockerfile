@@ -20,23 +20,22 @@ ENV UV_COMPILE_BYTECODE=1
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#caching
 ENV UV_LINK_MODE=copy
 
-## Install dependencies
-## Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
-#RUN --mount=type=cache,target=/root/.cache/uv \
-#    --mount=type=bind,source=uv.lock,target=uv.lock \
-#    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-#    uv sync --frozen --no-install-project
-
-# Xác định cache key prefix
-ARG PROJECT_NAME=my-awesome-project
-ARG CACHE_VERSION=v1
-
-# Install dependencies với cache key prefix
-RUN --mount=type=cache,id=${PROJECT_NAME}-uv-cache-${CACHE_VERSION},target=/root/.cache/uv \
+# Install dependencies
+# Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
+RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-project
 
+## Xác định cache key prefix
+#ARG PROJECT_NAME=my-awesome-project
+#ARG CACHE_VERSION=v1
+#
+## Install dependencies với cache key prefix
+#RUN --mount=type=cache,id=${PROJECT_NAME}-uv-cache-${CACHE_VERSION},target=/root/.cache/uv \
+#    --mount=type=bind,source=uv.lock,target=uv.lock \
+#    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+#    uv sync --frozen --no-install-project
 
 ENV PYTHONPATH=/app
 
