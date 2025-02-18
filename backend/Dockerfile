@@ -20,6 +20,10 @@ ENV UV_COMPILE_BYTECODE=1
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#caching
 ENV UV_LINK_MODE=copy
 
+# Xác định cache key prefix
+ARG PROJECT_NAME=backend
+ARG CACHE_VERSION=v1
+
 # Install dependencies
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
 RUN --mount=type=cache,id=${PROJECT_NAME}-uv-cache-${CACHE_VERSION},target=/root/.cache/uv \
