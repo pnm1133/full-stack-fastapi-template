@@ -1,20 +1,19 @@
 {
-  "$schema": "https://railway.app/railway.schema.json",
+  "$schema": "https://railway.com/railway.schema.json",
   "build": {
     "builder": "DOCKERFILE",
-    "dockerfilePath": "backend/Dockerfile",
-    "watchPatterns": [
-      "backend/**/*.py",
-      "backend/pyproject.toml",
-      "backend/uv.lock"
-    ]
+    "dockerfilePath": "Dockerfile"
   },
   "deploy": {
+    "runtime": "V2",
     "numReplicas": 1,
     "sleepApplication": false,
-    "healthcheckPath": "/api/v1/utils/health-check",
-    "healthcheckTimeout": 300,
+    "multiRegionConfig": {
+      "us-west2": {
+        "numReplicas": 1
+      }
+    },
     "restartPolicyType": "ON_FAILURE",
-    "startCommand": "cd backend && bash scripts/prestart.sh && fastapi run --workers 4 app/main.py"
+    "restartPolicyMaxRetries": 10
   }
 }
